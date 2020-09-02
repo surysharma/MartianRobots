@@ -1,9 +1,9 @@
 package com.thebigscale
 
 import junit.framework.Assert.*
-import martianrobots.GridCoordinates
-import martianrobots.Orientation
-import martianrobots.RobotImpl
+import GridCoordinates
+import Orientation
+import RobotImpl
 import org.hamcrest.core.Is.*
 import org.junit.Assert.assertThat
 import org.junit.Before

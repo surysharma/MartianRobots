@@ -1,5 +1,3 @@
-package martianrobots
-
 interface Robot {
     fun orientation(): Orientation
     fun getGridCoordinates(): GridCoordinates
