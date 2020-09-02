@@ -38,10 +38,10 @@ class RobotImpl(x: Int, y: Int, orientation: Orientation, private val scent: Set
         var x: Int = gridCoordinates.x
         var y: Int = gridCoordinates.y
         when (orientation) {
-            Orientation.EAST -> x++
-            Orientation.WEST -> x--
-            Orientation.NORTH -> y++
-            Orientation.SOUTH -> y--
+            Orientation.EAST -> x +=1
+            Orientation.WEST -> x -=1
+            Orientation.NORTH -> y +=1
+            Orientation.SOUTH -> y -=1
         }
         if (hasScent(x, y)) return false
         GridCoordinates(x, y)
@@ -52,10 +52,10 @@ class RobotImpl(x: Int, y: Int, orientation: Orientation, private val scent: Set
         var x: Int = gridCoordinates.x
         var y: Int = gridCoordinates.y
         when (orientation) {
-            Orientation.EAST -> x--
-            Orientation.WEST -> x++
-            Orientation.NORTH -> y--
-            Orientation.SOUTH -> y++
+            Orientation.EAST -> x -=1
+            Orientation.WEST -> x +=1
+            Orientation.NORTH -> y -=1
+            Orientation.SOUTH -> y +=1
         }
         if (hasScent(x, y)) return false
         GridCoordinates(x, y)
