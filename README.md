@@ -12,3 +12,9 @@ There are unit tests
 `mvn clean test` 
 
 
+TODO's
+--------
+
+TODO: Refactor the movements to its own strategies
+ 
+
