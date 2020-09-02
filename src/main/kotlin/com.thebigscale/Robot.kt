@@ -1,88 +1,33 @@
+import movements.GridCoordinates
+import movements.Position
+import movements.RobotMovement
+
+/**
+ * Client facing external Robot interface.
+ */
 interface Robot {
-    fun orientation(): Orientation
-    fun getGridCoordinates(): GridCoordinates
-    fun location(): GridCoordinates
-    fun moveForward(): Boolean
-    fun moveBackward(): Boolean
-    fun turnLeft(): Boolean
-    fun turnRight(): Boolean
+    fun hasScent(gridCoordinates: GridCoordinates): Boolean
+    fun move(movement: RobotMovement): Position
+    fun position(): Position
 }
 
-class RobotImpl(x: Int, y: Int, orientation: Orientation, private val scent: Set<GridCoordinates>) : Robot {
-    private var gridCoordinates: GridCoordinates = GridCoordinates(x, y)
-    private var orientation: Orientation
+/**
+ * stateful Robot client with an up to date position
+ */
+class RobotImpl : Robot {
 
-    init {
-        this.orientation = orientation
+    private var position: Position
+
+    constructor(position: Position){
+        this.position = position
     }
 
-    private fun hasScent(x: Int, y: Int): Boolean {
-        return scent.contains(GridCoordinates(x, y))
-    }
+    override fun position() = Position(this.position.gridCoordinates, this.position.orientation, this.position.hasScent)
 
-    override fun orientation(): Orientation {
-        return orientation
-    }
+    override fun hasScent(gridCoordinates: GridCoordinates): Boolean = position.hasScent
 
-    override fun getGridCoordinates(): GridCoordinates {
-        return gridCoordinates
-    }
-
-    override fun location(): GridCoordinates {
-        return gridCoordinates
-    }
-
-    override fun moveForward(): Boolean {
-        var x: Int = gridCoordinates.x
-        var y: Int = gridCoordinates.y
-        when (orientation) {
-            Orientation.EAST -> x +=1
-            Orientation.WEST -> x -=1
-            Orientation.NORTH -> y +=1
-            Orientation.SOUTH -> y -=1
-        }
-        if (hasScent(x, y)) return false
-        GridCoordinates(x, y)
-        return true
-    }
-
-    override fun moveBackward(): Boolean {
-        var x: Int = gridCoordinates.x
-        var y: Int = gridCoordinates.y
-        when (orientation) {
-            Orientation.EAST -> x -=1
-            Orientation.WEST -> x +=1
-            Orientation.NORTH -> y -=1
-            Orientation.SOUTH -> y +=1
-        }
-        if (hasScent(x, y)) return false
-        GridCoordinates(x, y)
-        return true
-    }
-
-    override fun turnLeft(): Boolean {
-        orientation = when (orientation) {
-            Orientation.EAST -> Orientation.NORTH
-            Orientation.WEST -> Orientation.SOUTH
-            Orientation.NORTH -> Orientation.WEST
-            Orientation.SOUTH -> Orientation.EAST
-        }
-        return true
-    }
-
-    override fun turnRight(): Boolean {
-        orientation = when (orientation) {
-            Orientation.NORTH -> Orientation.EAST
-            Orientation.SOUTH -> Orientation.WEST
-            Orientation.EAST -> Orientation.SOUTH
-            Orientation.WEST -> Orientation.NORTH
-        }
-        return true
+    override fun move(movement: RobotMovement): Position {
+        this.position = movement.makeMovement(this)
+        return this.position
     }
 }
-
-enum class Orientation(prettyPrint: String) {
-    EAST("E"), WEST("W"), NORTH("N"), SOUTH("S")
-}
-
-data class GridCoordinates(val x: Int, val y: Int)

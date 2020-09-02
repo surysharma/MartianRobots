@@ -1,9 +1,13 @@
 package com.thebigscale
 
-import junit.framework.Assert.*
-import GridCoordinates
-import Orientation
 import RobotImpl
+import movements.GridCoordinates
+import movements.Orientation
+import movements.Position
+import movements.impl.BackwardRobotMovementImpl
+import movements.impl.ForwardRobotMovementImpl
+import movements.impl.LeftRobotMovementImpl
+import movements.impl.RightRobotMovementImpl
 import org.hamcrest.core.Is.*
 import org.junit.Assert.assertThat
 import org.junit.Before
@@ -21,130 +25,141 @@ class RobotTest {
 
     @Test
     fun should_turn_robot_from_north_to_west() {
-        val robot = RobotImpl(10, 20, Orientation.NORTH, scents)
-        assertTrue(robot.turnLeft())
-        assertThat(Orientation.WEST, `is`(robot.orientation()))
+        //Given
+        val initialPosition = Position(GridCoordinates(0, 0), Orientation.NORTH, false)
+        val robot = RobotImpl(initialPosition)
+
+        //When
+        val newPosition = robot.move(LeftRobotMovementImpl())
+
+        //Then
+        assertThat(newPosition.orientation, `is`(Orientation.WEST))
+        assertThat(newPosition.gridCoordinates, `is`(robot.position().gridCoordinates))
     }
+
 
     @Test
     fun should_turn_robot_from_south_to_east() {
         //Given
-        val robot = RobotImpl(10, 20, Orientation.SOUTH, scents)
+        val initialPosition = Position(GridCoordinates(10, 20), Orientation.SOUTH, false)
+        val robot = RobotImpl(initialPosition)
 
         //When
-        val turnLeft = robot.turnLeft()
+        val newPosition = robot.move(LeftRobotMovementImpl())
 
         //Then
-        assertTrue(turnLeft)
-        assertThat(Orientation.EAST, `is`(robot.orientation()))
+        assertThat(newPosition.orientation, `is`(Orientation.EAST))
+        assertThat(newPosition.gridCoordinates, `is`(robot.position().gridCoordinates))
     }
+
 
     @Test
     fun should_turn_robot_from_east_to_north() {
         //Given
-        val robot = RobotImpl(10, 20, Orientation.EAST, scents)
+        val initialPosition = Position(GridCoordinates(10, 20), Orientation.EAST, false)
+        val robot = RobotImpl(initialPosition)
 
         //When
-        val turnLeft = robot.turnLeft()
+        val newPosition = robot.move(LeftRobotMovementImpl())
 
         //Then
-        assertTrue(turnLeft)
-        assertThat(Orientation.NORTH, `is`(robot.orientation()))
+        assertThat(newPosition.orientation, `is`(Orientation.NORTH))
+        assertThat(newPosition.gridCoordinates, `is`(robot.position().gridCoordinates))
     }
 
     @Test
     fun should_turn_robot_from_west_to_south() {
         //Given
-        val robot = RobotImpl(10, 20, Orientation.WEST, scents)
+        val initialPosition = Position(GridCoordinates(10, 20), Orientation.WEST, false)
+        val robot = RobotImpl(initialPosition)
+
         //When
-        val turnLeft = robot.turnLeft()
+        val newPosition = robot.move(LeftRobotMovementImpl())
 
         //Then
-        assertTrue(turnLeft)
-        assertThat(Orientation.SOUTH, `is`(robot.orientation()))
+        assertThat(newPosition.orientation, `is`(Orientation.SOUTH))
+        assertThat(newPosition.gridCoordinates, `is`(robot.position().gridCoordinates))
     }
 
     @Test
     fun should_turn_robot_from_north_to_east() {
         //Given
-        val robot = RobotImpl(10, 20, Orientation.NORTH, scents)
+        val initialPosition = Position(GridCoordinates(10, 20), Orientation.NORTH, false)
+        val robot = RobotImpl(initialPosition)
 
         //When
-        val turnRight = robot.turnRight()
+        val newPosition = robot.move(RightRobotMovementImpl())
 
         //Then
-        assertTrue(turnRight)
-        assertThat(Orientation.EAST, `is`(robot.orientation()))
+        assertThat(newPosition.orientation, `is`(Orientation.EAST))
+        assertThat(newPosition.gridCoordinates, `is`(robot.position().gridCoordinates))
     }
 
     @Test
     fun should_turn_robot_from_south_to_west() {
         //Given
-        val robot = RobotImpl(10, 20, Orientation.SOUTH, scents)
+        val initialPosition = Position(GridCoordinates(10, 20), Orientation.SOUTH, false)
+        val robot = RobotImpl(initialPosition)
 
         //When
-        val turnRight = robot.turnRight()
+        val newPosition = robot.move(RightRobotMovementImpl())
 
         //Then
-        assertTrue(turnRight)
-        assertThat(Orientation.WEST, `is`(robot.orientation()))
+        assertThat(newPosition.orientation, `is`(Orientation.WEST))
+        assertThat(newPosition.gridCoordinates, `is`(robot.position().gridCoordinates))
     }
 
     @Test
     fun should_turn_robot_from_east_to_south() {
         //Given
-        val robot = RobotImpl(10, 20, Orientation.EAST, scents)
+        val initialPosition = Position(GridCoordinates(10, 20), Orientation.EAST, false)
+        val robot = RobotImpl(initialPosition)
 
         //When
-        val turnRight = robot.turnRight()
+        val newPosition = robot.move(RightRobotMovementImpl())
 
         //Then
-        assertTrue(turnRight)
-        assertThat(Orientation.SOUTH, `is`(robot.orientation()))
+        assertThat(newPosition.orientation, `is`(Orientation.SOUTH))
+        assertThat(newPosition.gridCoordinates, `is`(robot.position().gridCoordinates))
     }
 
     @Test
     fun should_turn_robot_from_west_to_north() {
         //Given
-        val robot = RobotImpl(10, 20, Orientation.WEST, scents)
+        val initialPosition = Position(GridCoordinates(10, 20), Orientation.WEST, false)
+        val robot = RobotImpl(initialPosition)
 
         //When
-        val turnRight = robot.turnRight()
+        val newPosition = robot.move(RightRobotMovementImpl())
 
         //Then
-        assertTrue(turnRight)
-        assertThat(Orientation.NORTH, `is`(robot.orientation()))
+        assertThat(newPosition.orientation, `is`(Orientation.NORTH))
+        assertThat(newPosition.gridCoordinates, `is`(robot.position().gridCoordinates))
     }
 
-
     @Test
-    fun should_move_forward_toward_edge(): Unit {
+    fun should_move_forward_toward_edge() {
         //Given
-        val robot = RobotImpl(10, 20, Orientation.NORTH, scents)
-        scents.add(GridCoordinates(10, 21))
+        val initialPosition = Position(GridCoordinates(10, 20), Orientation.NORTH, false)
+        val robot = RobotImpl(initialPosition)
 
         //When
-        val moveForward = robot.moveForward()
+        val newPosition = robot.move(ForwardRobotMovementImpl())
 
         //Then
-        assertFalse(moveForward)
-        assertThat(GridCoordinates(10, 20), `is`(robot.getGridCoordinates()))
-
+        assertThat(newPosition.gridCoordinates, `is`(GridCoordinates(10, 21)))
     }
 
     @Test
     fun should_move_backward_toward_edge() {
         //Given
-        val robot = RobotImpl(10, 20, Orientation.NORTH, scents)
-        scents.add(GridCoordinates(10, 19))
-        scents.add(GridCoordinates(6, 4))
+        val initialPosition = Position(GridCoordinates(10, 20), Orientation.NORTH, false)
+        val robot = RobotImpl(initialPosition)
 
         //When
-        val moveBackward = robot.moveBackward()
+        val newPosition = robot.move(BackwardRobotMovementImpl())
 
         //Then
-        assertFalse(moveBackward)
-        assertThat(GridCoordinates(10, 20), `is`(robot.getGridCoordinates()))
+        assertThat(newPosition.gridCoordinates, `is`(GridCoordinates(10, 19)))
     }
-
 }
